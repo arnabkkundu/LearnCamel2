@@ -1,0 +1,65 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5432/localDB
+    username: postgres
+    password: Postgres
+
+
+
+startRoute: timer:hello?period=10s
+fromRoute: file:data/input?delete=true&readLock=none
+toRouteFile: file:data/output
+toRouteDB: jdbc:dataSource
+toRouteFileDBSuccess: file:data/output?fileName=Success.txt
+messages: This is dev environment
+
+---
+spring:
+  profiles: stage
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5432/localDB
+    username: postgres
+    password: Postgres
+
+
+
+
+startRoute: timer:hello?period=10s
+fromRoute: file:data/input?delete=true&readLock=none
+toRouteFile: file:data/output
+toRouteDB: jdbc:dataSource
+toRouteFileDBSuccess: file:data/output?fileName=Success.txt
+messages: This is stage environment
+---
+spring:
+  profiles: prod
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5432/localDB
+    username: postgres
+    password: Postgres
+
+
+startRoute: timer:hello?period=10s
+fromRoute: file:data/input?delete=true&readLock=none
+toRouteFile: file:data/output
+toRouteDB: jdbc:dataSource
+toRouteFileDBSuccess: file:data/output?fileName=Success.txt
+messages: This is prod environment
+
+---
+spring:
+  profiles: mock
+startRoute: direct:input
+fromRoute: file:data/input?delete=true&readLock=none
+toRouteFile: mock:output
+toRouteDB: mock:output1
+toRouteFileDBSuccess: mock:output2
+messages: This is mock environment
